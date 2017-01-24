@@ -1,5 +1,26 @@
 from bs4 import BeautifulSoup
 import requests
+import tweepy
+from credentials import creds
+
+def get_api(cfg):
+    auth = tweepy.OAuthHandler(cfg['consumer_key'], cfg['consumer_secret'])
+    auth.set_access_token(cfg['access_token'], cfg['access_token_secret'])
+    return tweepy.API(auth)
+
+cfg = {
+"consumer_key" : creds()[0],
+"consumer_secret" : creds()[1],
+"access_token" : creds()[2],
+"access_token_secret" : creds()[3]
+}
+
+api = get_api(cfg)
+tweet = "Hi"
+status = api.update_status(status=tweet)
+
+# if __name__ == "__main__":
+#     main()
 
 base_url = "http://www.tvguide.com/tvshows/law-order/tv-listings/100255/"
 
