@@ -2,25 +2,10 @@ from bs4 import BeautifulSoup
 import requests
 import tweepy
 from credentials import creds
+import datetime
+import time
 
-def get_api(cfg):
-    auth = tweepy.OAuthHandler(cfg['consumer_key'], cfg['consumer_secret'])
-    auth.set_access_token(cfg['access_token'], cfg['access_token_secret'])
-    return tweepy.API(auth)
 
-cfg = {
-"consumer_key" : creds()[0],
-"consumer_secret" : creds()[1],
-"access_token" : creds()[2],
-"access_token_secret" : creds()[3]
-}
-
-api = get_api(cfg)
-tweet = "Hi"
-status = api.update_status(status=tweet)
-
-# if __name__ == "__main__":
-#     main()
 
 base_url = "http://www.tvguide.com/tvshows/law-order/tv-listings/100255/"
 
@@ -65,9 +50,52 @@ channel = ['WE', 'WE', 'WE', 'WE', 'WE', 'WE', 'WE', 'WE', 'WGNA', 'TNT', 'WE', 
 for i,show in enumerate(day):
     new_show = []
     new_show.append(day[i])
-    new_show.append(date[i])
+    new_show.append("".join(char for char in date[i] if char.isdecimal()))
     new_show.append(time[i])
     new_show.append(channel[i])
     all_showings.append(new_show)
 
+
+print(datetime.datetime.now())
+
+showing_times = []
+
+for show in all_showings:
+    if 'pm' in show[2]:
+        show[2] = show[2].split(':')
+        show[2] = int(show[2][0])
+        if show[2] == 12:
+            pass
+        else:
+            show[2] = int(show[2]) + 12
+    else:
+        show[2] = show[2].split(':')
+        show[2] = int(show[2][0])
+        if show[2] == 12:
+            show[2] = 0
+    print(show)
+
 print(all_showings)
+# for show in all_showings:
+#     x = datetime.datetime(year=2017,month=1,day=show[1],)
+
+
+
+def get_api(cfg):
+    auth = tweepy.OAuthHandler(cfg['consumer_key'], cfg['consumer_secret'])
+    auth.set_access_token(cfg['access_token'], cfg['access_token_secret'])
+    return tweepy.API(auth)
+
+cfg = {
+"consumer_key" : creds()[0],
+"consumer_secret" : creds()[1],
+"access_token" : creds()[2],
+"access_token_secret" : creds()[3]
+}
+
+#
+# api = get_api(cfg)
+# tweet ="On {} in 10 minutes".format(all_showings[0][3])
+# status = api.update_status(status=tweet)
+# if __name__ == "__main__":
+#     main()
