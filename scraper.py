@@ -11,8 +11,9 @@ base_url = "http://www.tvguide.com/tvshows/law-order/tv-listings/100255/"
 svu_url = "http://www.tvguide.com/tvshows/law-order/tv-listings/100257/"
 
 
-all_showings = []
+
 def scraper(url):
+    all_showings = []
     data = requests.get(url)
     souper = BeautifulSoup(data.text, 'html.parser')
     day = souper.find_all('span', {'class': 'airing-date-day'})
@@ -58,9 +59,10 @@ def scraper(url):
             show[2] = int(show[2][0])
             if show[2] == 12:
                 show[2] = 0
-    print(all_showings)
+    return all_showings
+all_showings = scraper(base_url)
 
-scraper(base_url)
+
 # day = ['Tue', 'Tue', 'Tue', 'Tue', 'Tue', 'Tue', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed']
 # date = ['Jan 24', 'Jan 24', 'Jan 24', 'Jan 24', 'Jan 24', 'Jan 24', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25']
 # time = ['6:00pm', '7:00pm', '8:00pm', '9:00pm', '10:00pm', '11:00pm', '12:00am', '1:00am', '4:00am', '5:00am', '10:00am', '11:00am', '11:00am', '12:00pm', '12:00pm', '1:00pm', '1:00pm', '2:00pm', '2:00pm', '3:00pm', '3:00pm', '4:00pm', '5:00pm', '6:00pm']
