@@ -60,9 +60,6 @@ def scraper(url):
             if show[2] == 12:
                 show[2] = 0
     return all_showings
-all_showings = scraper(base_url)
-
-
 # day = ['Tue', 'Tue', 'Tue', 'Tue', 'Tue', 'Tue', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed', 'Wed']
 # date = ['Jan 24', 'Jan 24', 'Jan 24', 'Jan 24', 'Jan 24', 'Jan 24', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25', 'Jan 25']
 # time = ['6:00pm', '7:00pm', '8:00pm', '9:00pm', '10:00pm', '11:00pm', '12:00am', '1:00am', '4:00am', '5:00am', '10:00am', '11:00am', '11:00am', '12:00pm', '12:00pm', '1:00pm', '1:00pm', '2:00pm', '2:00pm', '3:00pm', '3:00pm', '4:00pm', '5:00pm', '6:00pm']
@@ -73,29 +70,34 @@ all_showings = scraper(base_url)
 # svu_time = ['12:00am', '1:00am', '4:00am', '5:00am', '8:00pm', '9:00pm', '4:01am', '5:00am', '11:00am', '12:00pm', '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm', '6:00pm', '7:00pm', '8:00pm', '9:00pm', '11:01pm', '12:01am', '5:00am', '9:00am', '10:00am']
 # svu_channel = ['USA', 'USA', 'USA', 'USA', 'NBC', 'NBC', 'USA', 'USA', 'USA', 'USA', 'USA', 'USA', 'USA', 'USA', 'USA', 'USA', 'USA', 'USA', 'USA', 'USA', 'USA', 'USA', 'USA', 'USA']
 
-
-for show in all_showings:
-    x = datetime.datetime(year=2017,month=1,day=int(show[1]),hour=int(show[2]))
-    low = datetime.timedelta(minutes=8)
-    high = datetime.timedelta(minutes=12)
-    if x - low > datetime.datetime.now() and x - high < datetime.datetime.now():
-        print(show)
+def finder(shows):
+    for show in shows:
+        x = datetime.datetime(year=2017,month=1,day=int(show[1]),hour=int(show[2]))
+        low = datetime.timedelta(minutes=8)
+        high = datetime.timedelta(minutes=12)
+        if x - low > datetime.datetime.now() and x - high < datetime.datetime.now():
+            return show
 
 def get_api(cfg):
     auth = tweepy.OAuthHandler(cfg['consumer_key'], cfg['consumer_secret'])
     auth.set_access_token(cfg['access_token'], cfg['access_token_secret'])
     return tweepy.API(auth)
 
-cfg = {
-"consumer_key" : creds()[0],
-"consumer_secret" : creds()[1],
-"access_token" : creds()[2],
-"access_token_secret" : creds()[3]
-}
+def send_tweet(show):
+    cfg = {
+    "consumer_key" : creds()[0],
+    "consumer_secret" : creds()[1],
+    "access_token" : creds()[2],
+    "access_token_secret" : creds()[3]
+    }
 
-#
-# api = get_api(cfg)
-# tweet ="On {} in 10 minutes".format(all_showings[0][3])
-# status = api.update_status(status=tweet)
-# if __name__ == "__main__":
-#     main()
+    #
+    api = get_api(cfg)
+    tweet ="On {} in 10 minutes\n@con_redmond".format(show[2])
+    status = api.update_status(status=tweet)
+
+
+all_showings = scraper(base_url)
+x = finder(all_showings)
+if x:
+    send_tweet(x)
