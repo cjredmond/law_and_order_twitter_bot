@@ -68,10 +68,17 @@ def scraper(url):
 
 def finder(shows):
     for show in shows:
+        # print(show)
+        on_soon = []
         x = datetime.datetime(year=2017,month=1,day=int(show[1]),hour=int(show[2]))
         low = datetime.timedelta(minutes=2)
-        high = datetime.timedelta(minutes=7)
+        high = datetime.timedelta(minutes=13)
+        # print(x)
+        # print(x-low)
+        # print(datetime.datetime.now())
+        # print(x-high)
         if x - low > datetime.datetime.now() and x - high < datetime.datetime.now():
+            on_soon.append(show)
             return show
 
 def get_api(cfg):
@@ -91,61 +98,47 @@ def send_tweet(show):
     tweet ="On {} in 5 minutes\n@PFTCommenter\n{} {}:00".format(show[3],show[0],show[2])
     status = api.update_status(status=tweet)
 
-time.sleep(3600)
-all_showings = scraper(base_url)
-x = finder(all_showings)
-if x:
-    send_tweet(x)
-time.sleep(3600)
-all_showings = scraper(base_url)
-x = finder(all_showings)
-if x:
-    send_tweet(x)
+def send_second_tweet(show):
+    cfg = {
+    "consumer_key" : creds()[0],
+    "consumer_secret" : creds()[1],
+    "access_token" : creds()[2],
+    "access_token_secret" : creds()[3]
+    }
 
-time.sleep(3600)
-all_showings = scraper(base_url)
-x = finder(all_showings)
-if x:
-    send_tweet(x)
+    api = get_api(cfg)
+    tweet ="On {} in 10 minutes\n{} {}:00".format(show[3],show[0],show[2])
+    status = api.update_status(status=tweet)
 
-time.sleep(3600)
-all_showings = scraper(base_url)
-x = finder(all_showings)
-if x:
-    send_tweet(x)
+def main():
+    all_showings = scraper(base_url)
+    x = finder(all_showings)
+    if x:
+        all_showings.remove(x)
+    y = finder(all_showings)
+    if x and y:
+        # send_second_tweet(x)
+        time.sleep(360)
+        # send_tweet(y)
+    elif x and not y:
+        # send_tweet(x)
+        time.sleep(360)
+    else:
+        time.sleep(360)
+    time.sleep(3240)
 
-time.sleep(3600)
-all_showings = scraper(base_url)
-x = finder(all_showings)
-if x:
-    send_tweet(x)
+main()
+main()
+main()
+main()
+main()
+main()
 
-time.sleep(3600)
-all_showings = scraper(base_url)
-x = finder(all_showings)
-if x:
-    send_tweet(x)
 
-time.sleep(3600)
-all_showings = scraper(base_url)
-x = finder(all_showings)
-if x:
-    send_tweet(x)
 
-time.sleep(3600)
 all_showings = scraper(base_url)
 x = finder(all_showings)
 if x:
-    send_tweet(x)
-
+    for show in x:
+        send_tweet(show)
 time.sleep(3600)
-all_showings = scraper(base_url)
-x = finder(all_showings)
-if x:
-    send_tweet(x)
-
-time.sleep(3600)
-all_showings = scraper(base_url)
-x = finder(all_showings)
-if x:
-    send_tweet(x)
