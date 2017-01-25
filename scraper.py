@@ -5,12 +5,8 @@ from credentials import creds
 import datetime
 import time
 
-
-
 base_url = "http://www.tvguide.com/tvshows/law-order/tv-listings/100255/"
 svu_url = "http://www.tvguide.com/tvshows/law-order/tv-listings/100257/"
-
-
 
 def scraper(url):
     all_showings = []
@@ -73,8 +69,8 @@ def scraper(url):
 def finder(shows):
     for show in shows:
         x = datetime.datetime(year=2017,month=1,day=int(show[1]),hour=int(show[2]))
-        low = datetime.timedelta(minutes=8)
-        high = datetime.timedelta(minutes=12)
+        low = datetime.timedelta(minutes=2)
+        high = datetime.timedelta(minutes=7)
         if x - low > datetime.datetime.now() and x - high < datetime.datetime.now():
             return show
 
@@ -91,12 +87,64 @@ def send_tweet(show):
     "access_token_secret" : creds()[3]
     }
 
-    #
     api = get_api(cfg)
-    tweet ="On {} in 10 minutes\n@con_redmond".format(show[2])
+    tweet ="On {} in 5 minutes\n@PFTCommenter\n{} {}:00".format(show[3],show[0],show[2])
     status = api.update_status(status=tweet)
 
+time.sleep(3600)
+all_showings = scraper(base_url)
+x = finder(all_showings)
+if x:
+    send_tweet(x)
+time.sleep(3600)
+all_showings = scraper(base_url)
+x = finder(all_showings)
+if x:
+    send_tweet(x)
 
+time.sleep(3600)
+all_showings = scraper(base_url)
+x = finder(all_showings)
+if x:
+    send_tweet(x)
+
+time.sleep(3600)
+all_showings = scraper(base_url)
+x = finder(all_showings)
+if x:
+    send_tweet(x)
+
+time.sleep(3600)
+all_showings = scraper(base_url)
+x = finder(all_showings)
+if x:
+    send_tweet(x)
+
+time.sleep(3600)
+all_showings = scraper(base_url)
+x = finder(all_showings)
+if x:
+    send_tweet(x)
+
+time.sleep(3600)
+all_showings = scraper(base_url)
+x = finder(all_showings)
+if x:
+    send_tweet(x)
+
+time.sleep(3600)
+all_showings = scraper(base_url)
+x = finder(all_showings)
+if x:
+    send_tweet(x)
+
+time.sleep(3600)
+all_showings = scraper(base_url)
+x = finder(all_showings)
+if x:
+    send_tweet(x)
+
+time.sleep(3600)
 all_showings = scraper(base_url)
 x = finder(all_showings)
 if x:
