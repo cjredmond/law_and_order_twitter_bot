@@ -95,7 +95,7 @@ def send_tweet(show):
     }
 
     api = get_api(cfg)
-    tweet ="On {} in 5 minutes\n@PFTCommenter\n{} {}:00".format(show[3],show[0],show[2])
+    tweet ="On {} in 5 minutes\n{} {}:00".format(show[3],show[0],show[2])
     status = api.update_status(status=tweet)
 
 def send_second_tweet(show):
@@ -117,12 +117,12 @@ def main():
         all_showings.remove(x)
     y = finder(all_showings)
     if x and y:
-        # send_second_tweet(x)
+        send_second_tweet(x)
         time.sleep(360)
-        # send_tweet(y)
+        send_tweet(y)
     elif x and not y:
-        # send_tweet(x)
         time.sleep(360)
+        send_tweet(x)
     else:
         time.sleep(360)
     time.sleep(3240)
