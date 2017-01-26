@@ -110,8 +110,22 @@ def send_second_tweet(show):
     tweet ="On {} in 10 minutes\n{} {}:00".format(show[3],show[0],show[2])
     status = api.update_status(status=tweet)
 
+def send_svu_tweet(show):
+    cfg = {
+    "consumer_key" : creds()[0],
+    "consumer_secret" : creds()[1],
+    "access_token" : creds()[2],
+    "access_token_secret" : creds()[3]
+    }
+
+    api = get_api(cfg)
+    tweet ="SVU on {} in 10 minutes\n{} {}:00".format(show[3],show[0],show[2])
+    status = api.update_status(status=tweet)
+
 def main():
     all_showings = scraper(base_url)
+    svu_showings = scraper(svu_url)
+    z = finder(svu_showings)
     x = finder(all_showings)
     if x:
         all_showings.remove(x)
@@ -121,10 +135,19 @@ def main():
         time.sleep(360)
         send_tweet(y)
     elif x and not y:
-        time.sleep(360)
-        send_tweet(x)
+        if z:
+            send_svu_tweet(z)
+            time.sleep(360)
+            send_tweet(x)
+        else:
+            time.sleep(360)
+            send_tweet(x)
     else:
-        time.sleep(360)
+        if z:
+            time.sleep(360)
+            send_svu_tweet(z)
+        else:
+            time.sleep(360)
     time.sleep(3240)
 
 main()
@@ -133,12 +156,15 @@ main()
 main()
 main()
 main()
-
-
-
-all_showings = scraper(base_url)
-x = finder(all_showings)
-if x:
-    for show in x:
-        send_tweet(show)
-time.sleep(3600)
+main()
+main()
+main()
+main()
+main()
+main()
+main()
+main()
+main()
+main()
+main()
+main()
